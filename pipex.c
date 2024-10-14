@@ -6,7 +6,7 @@
 /*   By: ndavenne <ndavenne@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 10:16:25 by ndavenne          #+#    #+#             */
-/*   Updated: 2024/10/14 16:18:51 by ndavenne         ###   ########.fr       */
+/*   Updated: 2024/10/14 16:41:07 by ndavenne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,31 @@ void	check_args(int argc, char **argv)
 	}
 }
 
-void	exec_cmds(char ***cmds, char **env_paths)
+void	exec_cmds(char ***cmds, char **env_paths, char **envp)
 {
+	int		pipefd[2];
+	pid_t	pid;
 
+	if (pipe(pipefd) == -1)
+	{
+		perror("pipe error");
+		exit(EXIT_FAILURE);
+	}
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork error");
+		exit(EXIT_FAILURE);
+	}
+	if (pid == 0)
+	{
+		dup2();
+		execve(ft_strjoin("/bin", "/cat"), cmds[0], envp);
+	}
+	else
+	{
+		wait(NULL);
+	}
 }
 
 int	main(void)
@@ -91,6 +113,6 @@ int	main(void)
 	check_args(argc, argv);
 	env_paths = parse_env_paths(envp);
 	cmds = parse_cmds(argc, argv);
-	exec_cmds(cmds, env_paths);
+	exec_cmds(cmds, env_paths, envp);
 	return (0);
 }
