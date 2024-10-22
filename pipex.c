@@ -6,7 +6,7 @@
 /*   By: ndavenne <ndavenne@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 10:16:25 by ndavenne          #+#    #+#             */
-/*   Updated: 2024/10/22 17:23:22 by ndavenne         ###   ########.fr       */
+/*   Updated: 2024/10/22 17:52:37 by ndavenne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,9 +112,6 @@ void	exec_cmds(char ***cmds, char **env_paths, char **envp)
 		perror("pipe error");
 		exit(EXIT_FAILURE);
 	}
-	int fd = open("infile", O_RDONLY);
-	dup2(fd, STDIN_FILENO);
-	close(fd);
 	pid1 = fork();
 	if (pid1 == -1)
 	{
@@ -126,6 +123,9 @@ void	exec_cmds(char ***cmds, char **env_paths, char **envp)
 		close(pipefd[0]);
 		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
+		int fd = open("infile", O_RDONLY);
+		dup2(fd, STDIN_FILENO);
+		close(fd);
 		while (*env_paths != NULL)
 		{
 			execve(ft_pathjoin(*env_paths, cmds[0][0]), cmds[0], envp);
@@ -147,6 +147,9 @@ void	exec_cmds(char ***cmds, char **env_paths, char **envp)
 			close(pipefd[1]);
 			dup2(pipefd[0], STDIN_FILENO);
 			close(pipefd[0]);
+			int fd2 = open("outfile", O_WRONLY);
+			dup2(fd2, STDOUT_FILENO);
+			close(fd2);
 			while (*env_paths2 != NULL)
 			{
 				execve(ft_pathjoin(*env_paths2, cmds[1][0]), cmds[1], envp);
@@ -159,7 +162,7 @@ void	exec_cmds(char ***cmds, char **env_paths, char **envp)
 int	main(int argc, char **argv, char **envp)
 {
 	argc = 5;
-	char	*argtest[] = {"a.out", "infile", "cat", "wc -l", "outfile"};
+	char	*argtest[] = {"a.out", "infile", "cat", "grep lorem", "outfile"};
 	char	**env_paths;
 	char	***cmds;
 
