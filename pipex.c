@@ -6,11 +6,17 @@
 /*   By: ndavenne <ndavenne@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 10:16:25 by ndavenne          #+#    #+#             */
-/*   Updated: 2024/10/23 11:45:48 by ndavenne         ###   ########.fr       */
+/*   Updated: 2024/10/23 16:23:26 by ndavenne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	error()
+{
+	perror("Something happened, GLHF");
+	exit(EXIT_FAILURE);
+}
 
 void	print_string_tab(char **tab)
 {
@@ -103,9 +109,84 @@ char	*ft_pathjoin(char const *s1, char const *s2)
 // 	}
 // }
 
-void	exec_cmds(t_pipex *p)
+int	*exec_first_cmd(t_pipex *p, char **envp)
 {
+	pid_t	pid;
+	char	*path;
+	int		pipe_fd[2];
+	int		i;
 
+	if (pipe(pipe_fd) == -1)
+		error();
+	pid = fork();
+	if (pid == -1)
+		error();
+	if (pid == 0)
+	{
+		close(pipe_fd[1]);
+		dup2(p->in_fd, STDIN_FILENO);
+		close(p->in_fd);
+		i = 0;
+		while(p->env_paths[i] != NULL)
+		{
+			path = ft_pathjoin(p->env_paths[i], p->cmds[0][0]);
+			execve(path, p->cmds[0], envp);
+			i++;
+		}
+	}
+}
+
+void	exec_last_cmd(t_pipex *p, char **envp)
+{
+	pid_t	pid;
+	char	*path;
+	int		pipe_fd[2];
+	int		i;
+
+	pid = fork();
+	if (pid == -1)
+		error();
+	if (pid == 0)
+	{
+		close(pipe_fd[0]);
+		dup2(p->out_fd, STDOUT_FILENO);
+		close(p->out_fd);
+		i = 0;
+		while(p->env_paths[i] != NULL)
+		{
+			path = ft_pathjoin(p->env_paths[i], p->cmds[0][0]);
+			execve(path, p->cmds[0], envp);
+			i++;
+		}
+	}
+}
+
+void	exec_cmds(t_pipex *p, char **envp)
+{
+	pid_t	pid;
+	char	*path;
+	int		pipe_fd[2];
+	int		i;
+
+	if (pipe(pipe_fd) == -1)
+		error();
+	pid = fork();
+	if (pid == -1)
+		error;
+	else if (pid == 0)
+	{
+		close(pipe_fd[1]);
+		dup2(p->in_fd, STDIN_FILENO);
+		close(p->in_fd);
+		i = 0;
+		while(p->env_paths[i] != NULL)
+		{
+			path = ft_pathjoin(p->env_paths[i], p->cmds[0][0]);
+			execve(path, p->cmds[0], envp);
+			i++;
+		}
+	}
+	while ()
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -113,18 +194,13 @@ int	main(int argc, char **argv, char **envp)
 	t_pipex	p;
 	void	*arena_ptr;
 
-	p = (t_pipex){
-		.cmd_count = argc - 3,
-		.cmds = NULL,
-		.env_paths = NULL,
-		.in_fd = 0,
-		.out_fd = 0
-	};
-	arena_ptr = ft_arena(0);
 	check_args(argc, argv);
+	open_files(&p, argc, argv);
+	arena_ptr = ft_arena(0);
 	p.env_paths = parse_env_paths(envp);
 	p.cmds = parse_cmds(argc, argv);
-	exec_cmds(&p);
+	p.cmd_count = argc - 3;
+	exec_cmds(&p, envp);
 	free_arena(arena_ptr);
 	return (0);
 }

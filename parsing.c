@@ -6,7 +6,7 @@
 /*   By: ndavenne <ndavenne@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 11:22:06 by ndavenne          #+#    #+#             */
-/*   Updated: 2024/10/23 11:23:20 by ndavenne         ###   ########.fr       */
+/*   Updated: 2024/10/23 14:28:02 by ndavenne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	check_args(int argc, char **argv)
 {
 	if (argc < 5)
 	{
-		printf("Not enough arguments\n");
+		printf("Usage: ./pipex infile cmd1 cmd2 ... outfile\n");
 		exit(EXIT_FAILURE);
 	}
 	if (access(argv[1], R_OK) != 0)
@@ -65,5 +65,21 @@ void	check_args(int argc, char **argv)
 	{
 		perror("Outfile error");
 		exit (EXIT_FAILURE);
+	}
+}
+
+void	open_files(t_pipex *p, int argc, char **argv)
+{
+	p->in_fd = open(argv[1], O_RDONLY);
+	if (p->in_fd == -1)
+	{
+		perror("error when opening infile");
+		exit(EXIT_FAILURE);
+	}
+	p->out_fd = open(argv[argc- 1], O_WRONLY | O_TRUNC | O_CREAT, 0644);
+	if(p->out_fd == -1)
+	{
+		perror("error when opening outfile");
+		exit(EXIT_FAILURE);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: ndavenne <ndavenne@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 10:57:07 by ndavenne          #+#    #+#             */
-/*   Updated: 2024/10/23 11:44:46 by ndavenne         ###   ########.fr       */
+/*   Updated: 2024/10/24 16:33:56 by ndavenne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include "libndav.h"
 
 # define ARENA_SIZE 100000
+# define FREE_ARENA -42
 
 typedef enum e_bool
 {
@@ -29,6 +30,7 @@ typedef enum e_bool
 }	t_bool;
 
 typedef unsigned int t_uint;
+typedef unsigned char t_byte;
 
 typedef struct s_pipex
 {
@@ -36,14 +38,17 @@ typedef struct s_pipex
 	int		out_fd;
 	char	**env_paths;
 	char	***cmds;
-	t_uint	cmd_count;
+	int		cmd_count;
 }	t_pipex;
 
-void	*ft_arena(size_t size);
-void	free_arena(void *ptr);
+/**
+ *
+ */
+void	*ft_arena(ssize_t size);
 
 void	check_args(int argc, char **argv);
 char	**parse_env_paths(char **env);
 char	***parse_cmds(int argc, char **argv);
+void	open_files(t_pipex *p, int argc, char **argv);
 
 #endif
