@@ -6,7 +6,7 @@
 /*   By: ndavenne <ndavenne@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 11:22:06 by ndavenne          #+#    #+#             */
-/*   Updated: 2024/10/23 14:28:02 by ndavenne         ###   ########.fr       */
+/*   Updated: 2024/10/23 18:44:18 by ndavenne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ void	open_files(t_pipex *p, int argc, char **argv)
 		perror("error when opening infile");
 		exit(EXIT_FAILURE);
 	}
-	p->out_fd = open(argv[argc- 1], O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	if(p->out_fd == -1)
+	p->out_fd = open(argv[argc - 1], O_WRONLY | O_TRUNC | O_CREAT, 0644);
+	if (p->out_fd == -1)
 	{
 		perror("error when opening outfile");
 		exit(EXIT_FAILURE);
