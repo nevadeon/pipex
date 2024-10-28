@@ -20,10 +20,12 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@$(CC) $(FLAGS) -o $@ -c $<
 
 clean:
-	rm -rf $(OBJ_DIR)
+	@echo -e "\033[31m🗑️ Removing lib object files...\033[0m"
+	@rm -rf $(OBJ_DIR)
 
 fclean: clean
-	rm -rf $(NAME)
+	@echo -e "\033[31m🗑️ Removing libndav...\033[0m"
+	@rm -rf $(NAME)
 
 re: fclean all
 
