@@ -6,7 +6,7 @@
 /*   By: ndavenne <github@noedavenne.aleaas.coms    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 14:03:28 by ndavenne          #+#    #+#             */
-/*   Updated: 2024/10/27 18:52:50 by ndavenne         ###   ########.fr       */
+/*   Updated: 2024/10/28 11:11:12 by ndavenne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,26 +64,3 @@ void	*ft_arena_alloc(size_t size)
 	pos += size;
 	return (arena_tail->content + pos - size);
 }
-
-// #include <stdio.h>
-// int	main(void)
-// {
-// 	char **tab;
-// 	tab = (char **)ft_arena_alloc(sizeof(char *) * 5);
-// 	int i = 0;
-// 	while (i < 5)
-// 	{
-// 		tab[i] = (char *)ft_arena_alloc(20);
-// 		tab[i][0] = 't';
-// 		tab[i][1] = '\0';
-// 		i++;
-// 	}
-// 	i = 0;
-// 	while (i < 5)
-// 	{
-// 		printf("%s\n", tab[i]);
-// 		i++;
-// 	}
-// 	ft_free_arena();
-// 	return (0);
-// }
