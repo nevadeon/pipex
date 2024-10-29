@@ -90,12 +90,12 @@ gdb: all
 # ============================================================================ #
 
 msg_comp:
-	@echo -e "$(YELLOW)🔧 Compiling pipex...$(RESET)"
+	@echo -e "$(YELLOW)🔧 Compiling pipex... [$(CFLAGS)]$(RESET)"
 
 msg_clean:
-	@echo -e "$(RED)🗑️ Removing object files...$(RESET)"
+	@echo -e "$(YELLOW)🗑️ Removing object files...$(RESET)"
 
 msg_fclean:
-	@echo -e "$(RED)🗑️ Removing pipex...$(RESET)"
+	@echo -e "$(YELLOW)🗑️ Removing pipex...$(RESET)"
 
 .PHONY: all clean fclean lclean re val gdb msg_comp msg_clean msg_fclean
