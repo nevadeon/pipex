@@ -82,13 +82,20 @@ lclean:
 
 re: fclean all
 
+# ============================================================================ #
+#        Test rules                                                            #
+# ============================================================================ #
+
 val: CFLAGS += -g
-val: all
-	valgrind --leak-cheack=full ./$(NAME)
+val: libtest all
+	valgrind --leak-check=full ./$(NAME)
 
 gdb: CFLAGS += -g
-gdb: all
+gdb: libtest all
 	gdb $(NAME)
+
+libtest:
+	@make -s -C $(LIB_DIR) test
 
 # ============================================================================ #
 #        Message rules                                                         #
@@ -103,4 +110,4 @@ msg_clean:
 msg_fclean:
 	@printf "$(YELLOW)🗑️ Removing pipex...\n$(RESET)"
 
-.PHONY: all clean fclean lclean re val gdb msg_comp msg_clean msg_fclean
+.PHONY: all clean fclean lclean re val gdb libtest msg_comp msg_clean msg_fclean
