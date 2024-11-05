@@ -31,8 +31,8 @@ BG_MAGENTA := \033[45m
 BG_CYAN := \033[46m
 BG_WHITE := \033[47m
 
-RESET := \033[0m		# Retour a la couleur par defaut
-CLEAR_LINE := \033[K	# Effacer une ligne
+RESET := \033[0m
+CLEAR_LINE := \033[K
 
 # ============================================================================ #
 #        Makefile                                                              #
@@ -41,13 +41,18 @@ CLEAR_LINE := \033[K	# Effacer une ligne
 NAME = pipex
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -Iinclude
-LDFLAGS = -L$(LIB_DIR) -lndav $(LIB_INC)
-LIB_INC = -I$(LIB_DIR)/include
 
+# Flags
+CFLAGS = -Wall -Werror -Wextra -I$(INC_DIR)
+LDFLAGS = -L$(LIB_DIR) -lndav $(LIB_HEADER)
+LIB_HEADER = -I$(LIB_DIR)/$(LIB_INC_DIR)
+
+# Directories
 SRC_DIR = src
 OBJ_DIR = obj
-LIB_DIR = ./libndav
+INC_DIR = include
+LIB_DIR = libndav
+LIB_INC_DIR = include
 
 SRC = $(shell find $(SRC_DIR) -type f -name "*.c")
 OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
@@ -55,13 +60,13 @@ LIB = libndav.a
 
 all: $(NAME)
 
-$(NAME): msg_comp $(OBJ) $(LIB_DIR)/$(LIB)
+$(NAME): $(LIB_DIR)/$(LIB) msg_comp $(OBJ)
 	@$(CC) $(CFLAGS) -o $@ $(OBJ) $(LDFLAGS)
-	@echo -e "$(GREEN)✔ Pipex created.$(RESET)"
+	@printf "$(GREEN)✔ Pipex created.\n$(RESET)"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) -o $@ -c $< $(LIB_INC)
+	@$(CC) $(CFLAGS) -o $@ -c $< $(LIB_HEADER)
 
 $(LIB_DIR)/$(LIB):
 	@make -s -C $(LIB_DIR)
@@ -90,12 +95,12 @@ gdb: all
 # ============================================================================ #
 
 msg_comp:
-	@echo -e "$(YELLOW)🔧 Compiling pipex... [$(CFLAGS)]$(RESET)"
+	@printf "$(YELLOW)🔧 Compiling pipex... [$(CFLAGS)]\n$(RESET)"
 
 msg_clean:
-	@echo -e "$(YELLOW)🗑️ Removing object files...$(RESET)"
+	@printf "$(YELLOW)🗑️ Removing object files...\n$(RESET)"
 
 msg_fclean:
-	@echo -e "$(YELLOW)🗑️ Removing pipex...$(RESET)"
+	@printf "$(YELLOW)🗑️ Removing pipex...\n$(RESET)"
 
 .PHONY: all clean fclean lclean re val gdb msg_comp msg_clean msg_fclean

@@ -31,8 +31,8 @@ BG_MAGENTA := \033[45m
 BG_CYAN := \033[46m
 BG_WHITE := \033[47m
 
-RESET := \033[0m		# Retour a la couleur par defaut
-CLEAR_LINE := \033[K	# Effacer une ligne
+RESET := \033[0m
+CLEAR_LINE := \033[K
 
 # ============================================================================ #
 #        Makefile                                                              #
@@ -53,7 +53,7 @@ all: $(NAME)
 
 $(NAME): msg_comp $(OBJ)
 	@ar rcs $@ $(OBJ)
-	@echo -e "$(GREEN)✔ Libndav created.$(RESET)"
+	@printf "$(GREEN)✔ Libndav created.\n$(RESET)"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
@@ -74,12 +74,12 @@ test:
 # ============================================================================ #
 
 msg_comp:
-	@echo -e "$(YELLOW)🔧 Compiling libndav... [$(CFLAGS)]$(RESET)"
+	@printf "$(YELLOW)🔧 Compiling libndav... [$(CFLAGS)]\n$(RESET)"
 
 msg_clean:
-	@echo -e "$(YELLOW)🗑️ Removing lib object files...$(RESET)"
+	@printf "$(YELLOW)🗑️ Removing lib object files...\n$(RESET)"
 
 msg_fclean:
-	@echo -e "$(YELLOW)🗑️ Removing libndav...$(RESET)"
+	@printf "$(YELLOW)🗑️ Removing libndav...\n$(RESET)"
 
 .PHONY: all clean fclean re test msg_comp msg_clean msg_fclean
