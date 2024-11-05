@@ -38,25 +38,25 @@ CLEAR_LINE := \033[K
 #        Makefile                                                              #
 # ============================================================================ #
 
-NAME = pipex
+NAME := pipex
 
-CC = cc
+CC := cc
 
 # Flags
-CFLAGS = -Wall -Werror -Wextra -I$(INC_DIR)
-LDFLAGS = -L$(LIB_DIR) -lndav $(LIB_HEADER)
-LIB_HEADER = -I$(LIB_DIR)/$(LIB_INC_DIR)
+CFLAGS := -Wall -Werror -Wextra -I$(INC_DIR)
+LDFLAGS := -L$(LIB_DIR) -lndav $(LIB_HEADER)
+LIB_HEADER := -I$(LIB_DIR)/$(LIB_INC_DIR)
 
 # Directories
-SRC_DIR = src
-OBJ_DIR = obj
-INC_DIR = include
-LIB_DIR = libndav
-LIB_INC_DIR = include
+SRC_DIR := src
+OBJ_DIR := obj
+INC_DIR := include
+LIB_DIR := libndav
+LIB_INC_DIR := include
 
-SRC = $(shell find $(SRC_DIR) -type f -name "*.c")
-OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
-LIB = libndav.a
+SRC := $(shell find $(SRC_DIR) -type f -name "*.c")
+OBJ := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
+LIB := libndav.a
 
 all: $(NAME)
 
