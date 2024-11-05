@@ -61,3 +61,26 @@ void	*ft_arena_alloc(size_t size)
 	pos += size;
 	return (arena_tail->content + pos - size);
 }
+
+// void	*ft_block(size_t size)
+// {
+// 	static char		block[ARENA_BLOCK_SIZE];
+// 	static size_t	pos = 0;
+
+// 	pos += size;
+// 	return (block + pos - size);
+// }
+
+// int main(int argc, char const *argv[])
+// {
+// 	int i =0;
+// 	char *string;
+
+// 	while (i<30)
+// 	{
+// 		string = ft_arena_alloc(300);
+// 		i++;
+// 	}
+// 	ft_free_arena();
+// 	return 0;
+// }
