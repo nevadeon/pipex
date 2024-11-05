@@ -6,7 +6,7 @@
 /*   By: ndavenne <ndavenne@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 14:03:28 by ndavenne          #+#    #+#             */
-/*   Updated: 2024/11/05 13:45:04 by ndavenne         ###   ########.fr       */
+/*   Updated: 2024/11/05 16:21:48 by ndavenne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,6 @@ static t_list	**_arena_head(void)
 	if (arena_head == NULL)
 		arena_head = ft_lstnew(malloc(ARENA_BLOCK_SIZE));
 	return (&arena_head);
-}
-
-static t_list	*_new_block(t_list **list, size_t size)
-{
-	ft_lstadd_back(list, ft_lstnew(malloc(size)));
-	return ((*list)->next);
 }
 
 static void	_del_block(void *block)
@@ -41,25 +35,25 @@ void	ft_free_arena(void)
 
 void	*ft_arena_alloc(size_t size)
 {
-	t_list			*arena_tail;
+	t_list			**arena;
 	size_t			block_size;
 	static size_t	pos = 0;
 
-	arena_tail = ft_lstlast(*(_arena_head()));
-	if (arena_tail == NULL)
+	arena = _arena_head();
+	if ((*arena) == NULL)
 		return (NULL);
 	block_size = ARENA_BLOCK_SIZE;
 	if (pos + size > block_size)
 	{
 		while (size > block_size)
 			block_size *= 2;
-		arena_tail = _new_block(&arena_tail, size);
-		if (arena_tail == NULL)
+		ft_lstadd_front(arena, ft_lstnew(malloc(block_size)));
+		if ((*arena) == NULL)
 			return (NULL);
 		pos = 0;
 	}
 	pos += size;
-	return (arena_tail->content + pos - size);
+	return ((*arena)->content + pos - size);
 }
 
 // void	*ft_block(size_t size)
