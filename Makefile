@@ -42,17 +42,17 @@ NAME := pipex
 
 CC := cc
 
-# Flags
-CFLAGS := -Wall -Werror -Wextra -I$(INC_DIR)
-LDFLAGS := -L$(LIB_DIR) -lndav $(LIB_HEADER)
-LIB_HEADER := -I$(LIB_DIR)/$(LIB_INC_DIR)
-
 # Directories
 SRC_DIR := src
 OBJ_DIR := obj
 INC_DIR := include
 LIB_DIR := libndav
 LIB_INC_DIR := include
+
+# Flags
+CFLAGS := -Wall -Werror -Wextra -I$(INC_DIR)
+LIB_HEADER_FLAG := -I$(LIB_DIR)/$(LIB_INC_DIR)
+LDFLAGS := -L$(LIB_DIR) -lndav $(LIB_HEADER_FLAG)
 
 SRC := $(shell find $(SRC_DIR) -type f -name "*.c")
 OBJ := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
@@ -66,7 +66,7 @@ $(NAME): $(LIB_DIR)/$(LIB) msg_comp $(OBJ)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) -o $@ -c $< $(LIB_HEADER)
+	@$(CC) $(CFLAGS) $(LIB_HEADER_FLAG) -o $@ -c $<
 
 $(LIB_DIR)/$(LIB):
 	@make -s -C $(LIB_DIR)
@@ -102,12 +102,12 @@ libtest:
 # ============================================================================ #
 
 msg_comp:
-	@printf "$(YELLOW)🔧 Compiling pipex... [$(CFLAGS)]\n$(RESET)"
+	@printf "$(YELLOW)Compiling pipex... [$(CFLAGS)]\n$(RESET)"
 
 msg_clean:
-	@printf "$(YELLOW)🗑️ Removing object files...\n$(RESET)"
+	@printf "$(YELLOW)Removing object files...\n$(RESET)"
 
 msg_fclean:
-	@printf "$(YELLOW)🗑️ Removing pipex...\n$(RESET)"
+	@printf "$(YELLOW)Removing pipex...\n$(RESET)"
 
 .PHONY: all clean fclean lclean re val gdb libtest msg_comp msg_clean msg_fclean

@@ -41,7 +41,7 @@ CLEAR_LINE := \033[K
 NAME := libndav.a
 
 CC := cc
-CFLAGS := -Wall -Werror -Wextra -Iinclude
+CFLAGS = -Wall -Werror -Wextra -Iinclude
 
 SRC_DIR := src
 OBJ_DIR := obj
@@ -75,12 +75,12 @@ test: all
 # ============================================================================ #
 
 msg_comp:
-	@printf "$(YELLOW)🔧 Compiling libndav... [$(CFLAGS)]\n$(RESET)"
+	@printf "$(YELLOW)Compiling libndav... [$(CFLAGS)]\n$(RESET)"
 
 msg_clean:
-	@printf "$(YELLOW)🗑️ Removing lib object files...\n$(RESET)"
+	@printf "$(YELLOW)Removing lib object files...\n$(RESET)"
 
 msg_fclean:
-	@printf "$(YELLOW)🗑️ Removing libndav...\n$(RESET)"
+	@printf "$(YELLOW)Removing libndav...\n$(RESET)"
 
 .PHONY: all clean fclean re test msg_comp msg_clean msg_fclean
