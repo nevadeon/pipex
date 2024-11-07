@@ -6,7 +6,7 @@
 /*   By: ndavenne <github@noedavenne.aleaas.coms    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 10:16:25 by ndavenne          #+#    #+#             */
-/*   Updated: 2024/11/06 21:50:16 by ndavenne         ###   ########.fr       */
+/*   Updated: 2024/11/07 12:16:04 by ndavenne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,8 @@ void	exec_last_cmd(t_pipex *p, char **envp, int pipe_fd[2])
 		i = 0;
 		while (p->env_paths[i] != NULL)
 		{
-			path = ft_pathjoin(p->env_paths[i], p->cmds[p->cmd_count - 1][0]);
-			execve(path, p->cmds[p->cmd_count - 1], envp);
+			path = ft_pathjoin(p->env_paths[i], p->cmds[1][0]);
+			execve(path, p->cmds[1], envp);
 			i++;
 		}
 	}
@@ -102,12 +102,12 @@ void	exec_first_cmd(t_pipex *p, char **envp, int pipe_fd[2])
 
 void	exec_cmds(t_pipex *p, char **envp)
 {
-	int pipe_fd[2];
+	int	pipefd[2];
 
-	if (pipe(pipe_fd) == -1)
+	if(pipe(pipefd) == -1)
 		error();
-	exec_last_cmd(p, envp, pipe_fd);
-	exec_first_cmd(p, envp, pipe_fd);
+	exec_last_cmd(p, envp, pipefd);
+	exec_first_cmd(p, envp, pipefd);
 }
 
 int	main(int argc, char **argv, char **envp)
