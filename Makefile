@@ -1,11 +1,10 @@
 # ============================================================================ #
-#        Codes de couleur ANSI                                                 #
+#        ANSI color codes                                                      #
 # ============================================================================ #
 
 GREEN := \033[0;32m
 YELLOW := \033[0;33m
 
-# Couleurs ANSI en gras
 BOLD_GREEN := \033[1;32m
 BOLD_YELLOW := \033[1;33m
 
@@ -13,7 +12,7 @@ RESET := \033[0m
 CLEAR_LINE := \033[K
 
 # ============================================================================ #
-#        Makefile                                                              #
+#        Config variables                                                              #
 # ============================================================================ #
 
 NAME := pipex
@@ -32,9 +31,14 @@ CFLAGS := -Wall -Werror -Wextra -I$(INC_DIR)
 LIB_HEADER_FLAG := -I$(LIB_DIR)/$(LIB_INC_DIR)
 LDFLAGS := -L$(LIB_DIR) -lndav $(LIB_HEADER_FLAG)
 
+# Sources and objects
 SRC := $(shell find $(SRC_DIR) -type f -name "*.c")
 OBJ := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 LIB := libndav.a
+
+# ============================================================================ #
+#        Compilation rules                                                     #
+# ============================================================================ #
 
 all: $(NAME)
 
@@ -46,8 +50,11 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) $(LIB_HEADER_FLAG) -o $@ -c $<
 
-$(LIB_DIR)/$(LIB):
-	@make -s -C $(LIB_DIR)
+re: fclean all
+
+# ============================================================================ #
+#        Cleaning rules                                                        #
+# ============================================================================ #
 
 clean: msg_clean
 	@rm -rf $(OBJ_DIR)
@@ -55,10 +62,15 @@ clean: msg_clean
 fclean: clean msg_fclean
 	@rm -rf $(NAME)
 
+# ============================================================================ #
+#        Lib managing rules                                                    #
+# ============================================================================ #
+
+$(LIB_DIR)/$(LIB):
+	@make -s -C $(LIB_DIR)
+
 lclean:
 	@make -s -C $(LIB_DIR) fclean
-
-re: fclean all
 
 # ============================================================================ #
 #        Test rules                                                            #
@@ -76,7 +88,7 @@ libtest:
 	@make -s -C $(LIB_DIR) test
 
 # ============================================================================ #
-#        Message rules                                                         #
+#        Terminal message rules                                                #
 # ============================================================================ #
 
 msg_comp:
