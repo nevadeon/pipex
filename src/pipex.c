@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ndavenne <github@noedavenne.aleaas.coms    +#+  +:+       +#+        */
+/*   By: ndavenne <ndavenne@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 10:16:25 by ndavenne          #+#    #+#             */
-/*   Updated: 2024/11/07 12:16:04 by ndavenne         ###   ########.fr       */
+/*   Updated: 2024/11/07 19:14:22 by ndavenne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,11 @@ void	print_string_tab(char **tab)
 	}
 }
 
+char	*ft_strsjoin(const char *format, ...)
+{
+	va_list	args;
+}
+
 char	*ft_pathjoin(char const *s1, char const *s2)
 {
 	char	*joined;
@@ -48,11 +53,23 @@ char	*ft_pathjoin(char const *s1, char const *s2)
 	return (joined_o);
 }
 
-void	exec_last_cmd(t_pipex *p, char **envp, int pipe_fd[2])
+void	exec_cmd(t_pipex *p, char **envp, int cmd_index)
 {
 	char	*path;
-	pid_t	pid;
 	int		i;
+
+	i = 0;
+	while (p->env_paths[i] != NULL)
+	{
+		path = ft_pathjoin(p->env_paths[i], p->cmds[cmd_index][0]);
+		execve(path, p->cmds[cmd_index], envp);
+		i++;
+	}
+}
+
+void	exec_last(t_pipex *p, char **envp, int pipe_fd[2])
+{
+	pid_t	pid;
 
 	pid = fork();
 	if (pid == -1)
@@ -64,21 +81,13 @@ void	exec_last_cmd(t_pipex *p, char **envp, int pipe_fd[2])
 		close(pipe_fd[0]);
 		dup2(p->out_fd, STDOUT_FILENO);
 		close(p->out_fd);
-		i = 0;
-		while (p->env_paths[i] != NULL)
-		{
-			path = ft_pathjoin(p->env_paths[i], p->cmds[1][0]);
-			execve(path, p->cmds[1], envp);
-			i++;
-		}
+		exec_cmd(p, envp, p->cmd_count - 1);
 	}
 }
 
-void	exec_first_cmd(t_pipex *p, char **envp, int pipe_fd[2])
+void	exec_first(t_pipex *p, char **envp, int pipe_fd[2])
 {
-	char	*path;
 	pid_t	pid;
-	int		i;
 
 	pid = fork();
 	if (pid == -1)
@@ -90,24 +99,27 @@ void	exec_first_cmd(t_pipex *p, char **envp, int pipe_fd[2])
 		close(pipe_fd[1]);
 		dup2(p->in_fd, STDIN_FILENO);
 		close(p->in_fd);
-		i = 0;
-		while (p->env_paths[i] != NULL)
-		{
-			path = ft_pathjoin(p->env_paths[i], p->cmds[0][0]);
-			execve(path, p->cmds[0], envp);
-			i++;
-		}
+		exec_cmd(p, envp, 0);
 	}
 }
 
-void	exec_cmds(t_pipex *p, char **envp)
-{
-	int	pipefd[2];
 
-	if(pipe(pipefd) == -1)
-		error();
-	exec_last_cmd(p, envp, pipefd);
-	exec_first_cmd(p, envp, pipefd);
+void	exec_all(t_pipex *p, char **envp)
+{
+	int	**pipefd;
+	int	i;
+
+	pipefd = malloc(sizeof(int *) * p->cmd_count - 1);
+	i = 0;
+	while (i < p->cmd_count - 1)
+	{
+		pipefd[i] = malloc(sizeof(int) * 2);
+		if (pipe(pipefd[i])== -1)
+			error();
+		i++;
+	}
+	exec_last(p, envp, pipefd[p->cmd_count - 2]);
+	exec_first(p, envp, pipefd[0]);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -119,7 +131,7 @@ int	main(int argc, char **argv, char **envp)
 	p.env_paths = parse_env_paths(envp);
 	p.cmds = parse_cmds(argc, argv);
 	p.cmd_count = argc - 3;
-	exec_cmds(&p, envp);
+	exec_all(&p, envp);
 	// print_string_tab(p.env_paths);
 	// int i = -1;
 	// while (p.cmds[++i] != NULL)
