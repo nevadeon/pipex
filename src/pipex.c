@@ -6,7 +6,7 @@
 /*   By: ndavenne <ndavenne@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 10:16:25 by ndavenne          #+#    #+#             */
-/*   Updated: 2024/11/07 19:14:22 by ndavenne         ###   ########.fr       */
+/*   Updated: 2024/11/26 10:12:54 by ndavenne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,41 +30,27 @@ void	print_string_tab(char **tab)
 	}
 }
 
-char	*ft_strsjoin(const char *format, ...)
-{
-	va_list	args;
-}
-
-char	*ft_pathjoin(char const *s1, char const *s2)
-{
-	char	*joined;
-	char	*joined_o;
-
-	joined = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 2));
-	if (joined == NULL)
-		return (NULL);
-	joined_o = joined;
-	while (*s1 != '\0')
-		*joined++ = *s1++;
-	*joined++ = '/';
-	while (*s2 != '\0')
-		*joined++ = *s2++;
-	*joined = '\0';
-	return (joined_o);
-}
-
 void	exec_cmd(t_pipex *p, char **envp, int cmd_index)
 {
+	char	*cmd_name;
 	char	*path;
 	int		i;
 
-	i = 0;
-	while (p->env_paths[i] != NULL)
+	cmd_name = p->cmds[cmd_index][CMD_NAME_INDEX];
+	if (ft_strchr(cmd_name, '/'))
+		execve(cmd_name, p->cmds[cmd_index], envp);
+	else
 	{
-		path = ft_pathjoin(p->env_paths[i], p->cmds[cmd_index][0]);
-		execve(path, p->cmds[cmd_index], envp);
-		i++;
+		i = 0;
+		while (p->env_paths[i] != NULL)
+		{
+			cmd_name = p->cmds[cmd_index][CMD_NAME_INDEX];
+			path = ft_strsjoin(3, p->env_paths[i], "/", cmd_name);
+			execve(path, p->cmds[cmd_index], envp);
+			i++;
+		}
 	}
+	ft_dprintf(2, "pipex: command not found: %s", cmd_name);
 }
 
 void	exec_last(t_pipex *p, char **envp, int pipe_fd[2])
@@ -103,23 +89,14 @@ void	exec_first(t_pipex *p, char **envp, int pipe_fd[2])
 	}
 }
 
-
-void	exec_all(t_pipex *p, char **envp)
+void	executing(t_pipex *p, char **envp)
 {
-	int	**pipefd;
-	int	i;
+	int	pipefd[2];
 
-	pipefd = malloc(sizeof(int *) * p->cmd_count - 1);
-	i = 0;
-	while (i < p->cmd_count - 1)
-	{
-		pipefd[i] = malloc(sizeof(int) * 2);
-		if (pipe(pipefd[i])== -1)
-			error();
-		i++;
-	}
-	exec_last(p, envp, pipefd[p->cmd_count - 2]);
-	exec_first(p, envp, pipefd[0]);
+	if (pipe(pipefd) == -1)
+		error();
+	exec_last(p, envp, pipefd);
+	exec_first(p, envp, pipefd);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -131,15 +108,14 @@ int	main(int argc, char **argv, char **envp)
 	p.env_paths = parse_env_paths(envp);
 	p.cmds = parse_cmds(argc, argv);
 	p.cmd_count = argc - 3;
-	exec_all(&p, envp);
-	// print_string_tab(p.env_paths);
+	executing(&p, envp);
 	// int i = -1;
 	// while (p.cmds[++i] != NULL)
 	// {
 	// 	print_string_tab(p.cmds[i]);
 	// 	printf("-----------\n");
 	// }
+	// print_string_tab(p.env_paths);
 	// printf("%s\n", p.cmds[p.cmd_count - 1][0]);
 	return (0);
 }
-

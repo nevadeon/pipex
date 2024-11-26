@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ndavenne <github@noedavenne.aleaas.coms    +#+  +:+       +#+        */
+/*   By: ndavenne <ndavenne@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 10:57:07 by ndavenne          #+#    #+#             */
-/*   Updated: 2024/10/27 19:13:26 by ndavenne         ###   ########.fr       */
+/*   Updated: 2024/11/26 09:59:36 by ndavenne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 # include "libndav.h"
+
+#define CMD_NAME_INDEX 0
 
 typedef struct s_pipex
 {

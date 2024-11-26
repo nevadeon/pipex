@@ -77,12 +77,12 @@ lclean:
 # ============================================================================ #
 
 val: CFLAGS += -g
-val: libtest all
+val: libtest re
 	valgrind --leak-check=full ./$(NAME)
 
 gdb: CFLAGS += -g
-gdb: libtest all
-	gdb $(NAME)
+gdb: libtest re
+	gdb --args ./$(NAME) infile catasdsad "grep lucas" outfile
 
 libtest:
 	@make -s -C $(LIB_DIR) test

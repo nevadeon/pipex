@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libndav.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ndavenne <github@noedavenne.aleaas.coms    +#+  +:+       +#+        */
+/*   By: ndavenne <ndavenne@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 19:24:54 by ndavenne          #+#    #+#             */
-/*   Updated: 2024/10/27 18:49:59 by ndavenne         ###   ########.fr       */
+/*   Updated: 2024/11/25 14:56:13 by ndavenne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ char	*ft_itoa(int n);
 size_t	ft_strlen(const char *s);
 void	ft_strcpy(char *dest, const char *src);
 void	ft_strcat(char *dest, const char *src);
+char	*ft_strsjoin(int n, ...);
 char	*ft_strdup(const char *s);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strrchr(const char *s, int c);
@@ -112,7 +113,7 @@ char	*get_next_line(int fd);
  * continuity. The second one is practicity, the user doesn't need to worry
  * about allocated memory, only one call to the ft_free_arena at the end
  * of the program frees all used memory at once, no leaks are possible !
- * 
+ *
  * @param size The number of bytes that need to be allocated
  * @return A pointer to the allocated memory or NULL in case of error
  */

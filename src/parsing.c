@@ -6,7 +6,7 @@
 /*   By: ndavenne <ndavenne@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 11:22:06 by ndavenne          #+#    #+#             */
-/*   Updated: 2024/10/23 18:44:18 by ndavenne         ###   ########.fr       */
+/*   Updated: 2024/11/26 10:02:53 by ndavenne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ char	***parse_cmds(int argc, char **argv)
 
 void	check_args(int argc, char **argv)
 {
-	if (argc < 5)
+	if (argc != 5)
 	{
-		printf("Usage: ./pipex infile cmd1 cmd2 ... outfile\n");
+		printf("Usage: ./pipex infile cmd1 cmd2 outfile\n");
 		exit(EXIT_FAILURE);
 	}
 	if (access(argv[1], R_OK) != 0)
