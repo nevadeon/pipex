@@ -1,7 +1,0 @@
-infile content
-lorem ipsum
-lucas le goat
-ok super
-a
-b
-c

@@ -6,7 +6,7 @@
 /*   By: ndavenne <ndavenne@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 10:57:07 by ndavenne          #+#    #+#             */
-/*   Updated: 2024/11/26 09:59:36 by ndavenne         ###   ########.fr       */
+/*   Updated: 2024/11/26 14:10:09 by ndavenne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,12 @@ void	check_args(int argc, char **argv);
 char	**parse_env_paths(char **env);
 char	***parse_cmds(int argc, char **argv);
 void	open_files(t_pipex *p, int argc, char **argv);
+
+void	executing(t_pipex *p, char **envp);
+void	exec_first(t_pipex *p, char **envp, int pipe_fd[2]);
+void	exec_last(t_pipex *p, char **envp, int pipe_fd[2]);
+void	exec_cmd(t_pipex *p, char **envp, int cmd_index);
+
+void	error(void);
 
 #endif
