@@ -6,7 +6,7 @@
 /*   By: ndavenne <ndavenne@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 14:55:14 by ndavenne          #+#    #+#             */
-/*   Updated: 2024/11/25 15:09:06 by ndavenne         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:26:06 by ndavenne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ char	*ft_strsjoin(int n, ...)
 	va_end(args);
 	if (joined == NULL)
 		return (NULL);
+	joined[0] = '\0';
 	va_start(args, n);
 	i = -1;
 	while (++i < n)

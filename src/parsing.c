@@ -6,7 +6,7 @@
 /*   By: ndavenne <ndavenne@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 11:22:06 by ndavenne          #+#    #+#             */
-/*   Updated: 2024/11/26 10:02:53 by ndavenne         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:28:37 by ndavenne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	***parse_cmds(int argc, char **argv)
 	int		i;
 
 	nb_cmds = argc - 3;
-	cmds = (char ***)malloc(sizeof(char **) * (nb_cmds + 1));
+	cmds = ft_arena_alloc(sizeof(char **) * (nb_cmds + 1));
 	i = 0;
 	while (i < nb_cmds)
 	{
@@ -53,18 +53,18 @@ void	check_args(int argc, char **argv)
 {
 	if (argc != 5)
 	{
-		printf("Usage: ./pipex infile cmd1 cmd2 outfile\n");
+		ft_dprintf(STDERR_FILENO, "Usage: ./pipex infile cmd1 cmd2 outfile\n");
 		exit(EXIT_FAILURE);
 	}
 	if (access(argv[1], R_OK) != 0)
 	{
-		perror("Infile error");
-		exit (EXIT_FAILURE);
+		perror("Erreur accessing infile");
+		exit(errno);
 	}
 	if (access(argv[argc - 1], W_OK) != 0)
 	{
-		perror("Outfile error");
-		exit (EXIT_FAILURE);
+		perror("Erreur accessing outfile");
+		exit(errno);
 	}
 }
 
@@ -73,13 +73,13 @@ void	open_files(t_pipex *p, int argc, char **argv)
 	p->in_fd = open(argv[1], O_RDONLY);
 	if (p->in_fd == -1)
 	{
-		perror("error when opening infile");
-		exit(EXIT_FAILURE);
+		perror("Erreur opening infile");
+		exit(errno);
 	}
 	p->out_fd = open(argv[argc - 1], O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (p->out_fd == -1)
 	{
-		perror("error when opening outfile");
-		exit(EXIT_FAILURE);
+		perror("Erreur opening outfile");
+		exit(errno);
 	}
 }
