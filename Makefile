@@ -78,7 +78,7 @@ lclean:
 
 val: CFLAGS += -g
 val: libtest re
-	valgrind --leak-check=full --show-leak-kinds=all ./$(NAME) infile catsdf cat outfile
+	valgrind --leak-check=full --show-leak-kinds=all ./$(NAME) infile cat "grep lucas" outfile
 
 gdb: CFLAGS += -g
 gdb: libtest re

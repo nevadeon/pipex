@@ -6,7 +6,7 @@
 /*   By: ndavenne <ndavenne@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 10:57:07 by ndavenne          #+#    #+#             */
-/*   Updated: 2024/12/04 12:53:37 by ndavenne         ###   ########.fr       */
+/*   Updated: 2024/12/04 15:08:51 by ndavenne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@
 // 	 	perror("dup2"); \
 // } while (0)
 
-
 # define CMD_NAME_INDEX 0
 
 typedef enum e_error
@@ -78,6 +77,5 @@ void	open_files(t_pipex *p, int argc, char **argv);
 void	executing(t_pipex *p, char **envp);
 
 void	ft_error(t_error error_code);
-void	print_string_tab(char **tab);
 
 #endif
