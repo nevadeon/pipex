@@ -6,7 +6,7 @@
 /*   By: ndavenne <ndavenne@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 14:55:14 by ndavenne          #+#    #+#             */
-/*   Updated: 2024/12/04 13:26:06 by ndavenne         ###   ########.fr       */
+/*   Updated: 2024/12/04 14:52:35 by ndavenne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*ft_strsjoin(int n, ...)
 	i = -1;
 	while (++i < n)
 		len += ft_strlen(va_arg(args, char *));
-	joined = malloc((len + 1) * sizeof(char));
+	joined = ft_arena_alloc((len + 1) * sizeof(char));
 	va_end(args);
 	if (joined == NULL)
 		return (NULL);

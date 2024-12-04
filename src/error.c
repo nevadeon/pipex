@@ -6,7 +6,7 @@
 /*   By: ndavenne <ndavenne@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 10:01:28 by ndavenne          #+#    #+#             */
-/*   Updated: 2024/12/04 12:00:15 by ndavenne         ###   ########.fr       */
+/*   Updated: 2024/12/04 14:21:54 by ndavenne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,6 @@ const char	*get_error_message(t_error error_code)
 void	ft_error(t_error error_code)
 {
 	perror(get_error_message(error_code));
+	ft_free_arena();
 	exit(errno);
 }

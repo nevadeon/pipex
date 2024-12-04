@@ -6,7 +6,7 @@
 /*   By: ndavenne <ndavenne@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 14:07:54 by ndavenne          #+#    #+#             */
-/*   Updated: 2024/12/04 13:07:23 by ndavenne         ###   ########.fr       */
+/*   Updated: 2024/12/04 14:51:02 by ndavenne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	exec_last(t_pipex *p, char **envp, int pipe_fd[2])
 		exec_cmd(p, envp, p->cmd_count - 1);
 		ft_dprintf(STDERR_FILENO, "Erreur execve: %s: %s\n",
 			p->cmds[1][CMD_NAME_INDEX], strerror(errno));
+		ft_free_arena();
 		exit(errno);
 	}
 	close(pipe_fd[0]);
@@ -93,6 +94,7 @@ void	exec_first(t_pipex *p, char **envp, int pipe_fd[2])
 		exec_cmd(p, envp, 0);
 		ft_dprintf(STDERR_FILENO, "Erreur execve: %s: %s\n",
 			p->cmds[0][CMD_NAME_INDEX], strerror(errno));
+		ft_free_arena();
 		exit(errno);
 	}
 	close(pipe_fd[1]);

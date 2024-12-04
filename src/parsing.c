@@ -6,7 +6,7 @@
 /*   By: ndavenne <ndavenne@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 11:22:06 by ndavenne          #+#    #+#             */
-/*   Updated: 2024/12/04 13:28:37 by ndavenne         ###   ########.fr       */
+/*   Updated: 2024/12/04 14:52:31 by ndavenne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,16 +54,19 @@ void	check_args(int argc, char **argv)
 	if (argc != 5)
 	{
 		ft_dprintf(STDERR_FILENO, "Usage: ./pipex infile cmd1 cmd2 outfile\n");
+		ft_free_arena();
 		exit(EXIT_FAILURE);
 	}
 	if (access(argv[1], R_OK) != 0)
 	{
 		perror("Erreur accessing infile");
+		ft_free_arena();
 		exit(errno);
 	}
 	if (access(argv[argc - 1], W_OK) != 0)
 	{
 		perror("Erreur accessing outfile");
+		ft_free_arena();
 		exit(errno);
 	}
 }
@@ -74,12 +77,14 @@ void	open_files(t_pipex *p, int argc, char **argv)
 	if (p->in_fd == -1)
 	{
 		perror("Erreur opening infile");
+		ft_free_arena();
 		exit(errno);
 	}
 	p->out_fd = open(argv[argc - 1], O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (p->out_fd == -1)
 	{
 		perror("Erreur opening outfile");
+		ft_free_arena();
 		exit(errno);
 	}
 }

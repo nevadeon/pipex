@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ndavenne <github@noedavenne.aleaas.coms    +#+  +:+       +#+        */
+/*   By: ndavenne <ndavenne@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 16:39:45 by ndavenne          #+#    #+#             */
-/*   Updated: 2024/10/27 00:41:27 by ndavenne         ###   ########.fr       */
+/*   Updated: 2024/12/04 14:52:55 by ndavenne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,6 @@ static int	_count_words(const char *s, char c)
 	return (nb_words);
 }
 
-static char	**_free(char **tab, int last)
-{
-	int	i;
-
-	i = 0;
-	while (i <= last)
-		free(tab[i++]);
-	free(tab);
-	return (NULL);
-}
-
 static char	*_strdup_to_c(const char **s, char c)
 {
 	char	*cpy;
@@ -46,7 +35,7 @@ static char	*_strdup_to_c(const char **s, char c)
 	cpy_len = 0;
 	while ((*s)[cpy_len] && (*s)[cpy_len] != c)
 		cpy_len++;
-	cpy = (char *) malloc(sizeof(char) * (cpy_len + 1));
+	cpy = (char *) ft_arena_alloc(sizeof(char) * (cpy_len + 1));
 	if (cpy == NULL)
 		return (NULL);
 	i = 0;
@@ -65,7 +54,7 @@ char	**ft_split(char const *s, char c)
 	char	**tab;
 	int		i;
 
-	tab = (char **) malloc(sizeof(char *) * (_count_words(s, c) + 1));
+	tab = (char **) ft_arena_alloc(sizeof(char *) * (_count_words(s, c) + 1));
 	if (tab == NULL)
 		return (NULL);
 	i = 0;
@@ -77,7 +66,7 @@ char	**ft_split(char const *s, char c)
 		{
 			tab[i] = _strdup_to_c(&s, c);
 			if (tab[i] == NULL)
-				return (_free(tab, i));
+				return (NULL);
 			i++;
 		}
 	}
